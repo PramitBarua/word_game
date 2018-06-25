@@ -17,9 +17,14 @@ from src.word_game_package.update_result import update_result
 
 import os
 import pickle
+import sys
 
-def write_game(num_dict):
-    index = random_number(num_dict)
+def write_game(num_dict, **kargs):
+    if 'index' in kargs:
+        index = kargs['index']
+    else:
+        index = random_number(num_dict)
+        
     print('\n' + num_dict['meaning'][index])
     check = input('Write the word:')
     if check == num_dict['word'][index]:
@@ -28,6 +33,8 @@ def write_game(num_dict):
         print('Correct Answer: ' + num_dict['word'][index])
         print('Your Answer: ' + check)
         a = input('Press any key to continue.')
+        if a == '0000':
+            sys.exit()
         os.system('cls')
         num_dict = update_result(1, index, num_dict)
         return num_dict
@@ -37,6 +44,8 @@ def write_game(num_dict):
         print('Correct Answer: ' + num_dict['word'][index])
         print('Your Answer: ' + check)
         a = input('Press any key to continue.')
+        if a == '0000':
+            sys.exit()
         os.system('cls')
         num_dict = update_result(-1, index, num_dict)
         return num_dict

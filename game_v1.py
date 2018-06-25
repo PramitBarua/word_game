@@ -17,14 +17,17 @@ from src.word_game_package.edit_delete_word import edit_word
 from src.word_game_package.edit_delete_word import delete_word
 from src.word_game_package.mul_choice_que import mul_choice_que
 from src.word_game_package.write_game import write_game
+from src.word_game_package.save_file import saving_file
+from src.word_game_package.choose_the_game import choose_the_game
+from src.word_game_package.specific_score_word import specific_score_words
 
 import pickle
 import random
 import argparse
 
-def saving_file(num_dict):
-    with open('word_list.pickle', 'wb') as handle:
-        pickle.dump(dict_old, handle, protocol=pickle.HIGHEST_PROTOCOL)
+# def saving_file(num_dict):
+#     with open('word_list.pickle', 'wb') as handle:
+#         pickle.dump(dict_old, handle, protocol=pickle.HIGHEST_PROTOCOL)
     
 
 if __name__ == '__main__':    
@@ -52,16 +55,19 @@ if __name__ == '__main__':
         dict_new = delete_word(dict_old)
         saving_file(dict_new)
     elif args.Modify_word_list == 's':
-        for idx in range(len(dict_old['word'])):
+        number = input('Type the score: ')
+        number = int(number)
+        num_list = [index for index in range(len(dict_old['score'])) if dict_old['score'][index] == number]
+        if len(num_list) == 0:
+            print('No word on this score.')
+        for idx in num_list:
             print(dict_old['word'][idx] + '\t' +dict_old['meaning'][idx] + '\t' + 
                   str(dict_old['score'][idx])+ '\n\n')
-    else:        
-        for x in range(15):
-            seed = random.randint(-1,1) #decide which game will perform
-            if seed < 0: # means multiple choice ans 
-                dict_new = mul_choice_que(dict_old)
-                saving_file(dict_new)
-            else: #writing the word, meaning will be given
-                dict_new = write_game(dict_old)
-                saving_file(dict_new)
+    else:  
+        num_list = [index for index in range(len(dict_old['score'])) if dict_old['score'][index] < -3]     
+        if len(num_list) > 5:
+            specific_score_words(dict_old, num_list)       
+        else:          
+            for x in range(15):
+                choose_the_game(dict_old)
             

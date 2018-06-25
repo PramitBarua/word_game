@@ -18,7 +18,7 @@ import pickle
 
 def while_loop(num_dict):
     number = random.randint(-5,5)
-    while(1):
+    while(True):
         if number in num_dict['score']:
             break
         else: 
@@ -31,7 +31,7 @@ def random_number(num_dict):
     index = num_list[random.randint(0,len(num_list)-1)]           
     
     while(1):
-        if num_dict['score'][index]<-3:
+        if num_dict['score'][index]<-1:
             break
         elif len(num_list)>15:
             break

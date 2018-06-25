@@ -20,9 +20,12 @@ import pickle
 import random
 import os
 
-def mul_choice_que(num_dict):
+def mul_choice_que(num_dict, **kargs):
     word_meaning = random.randint(0,1) # 0 means word 1 means meaning
-    index = random_number(num_dict)
+    if 'index' not in kargs:
+        index = random_number(num_dict)
+    else:
+        index = kargs['index']
     word = []
     meaning = []
     if word_meaning == 0:
