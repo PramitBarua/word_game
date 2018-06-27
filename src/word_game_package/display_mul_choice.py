@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from click._compat import colorama
 
 __author__ = "Pramit Barua"
 __copyright__ = "Copyright 2018"
@@ -16,16 +17,19 @@ import random
 import os
 import msvcrt
 import sys
+import colorama
+# from termcolor import colored
+colorama.init(convert=True)
 
 def display_value(list_single_value, list_mul_value):
-    print('\n' + list_single_value[0])
+    print(colorama.Back.BLACK + '\n' + list_single_value[0] + colorama.Style.RESET_ALL)
 #     print('Choose the write answer:')
     x = [0,1,2,3]
     random.shuffle(x)
     ans = x.index(0)+1
     c = 1
     for idx in x:
-        print(str(c) +'. '+list_mul_value[idx])
+        print(colorama.Back.BLACK + str(c) + '. ' + list_mul_value[idx] + colorama.Style.RESET_ALL)
         c = c+1
         
     check = input('Choose the right answer:')
@@ -51,9 +55,9 @@ def display_value(list_single_value, list_mul_value):
         
     if check == str(ans):
         print('\nGood job\n')
-        print('Question: ' + list_single_value[0] + '\n')
-        print('Correct Answer: ' + list_mul_value[0])
-        print('Your Answer: ' + list_mul_value[x[int(check)-1]])
+        print('Question: ' + colorama.Back.BLACK + list_single_value[0] + '\n' + colorama.Style.RESET_ALL)
+        print('Correct Answer: ' + colorama.Back.BLACK + list_mul_value[0] + colorama.Style.RESET_ALL)
+        print('Your Answer: ' + colorama.Back.BLACK + colorama.Fore.RED + list_mul_value[x[int(check)-1]] + colorama.Style.RESET_ALL)
         a = input('Press any key to continue.')
         if a == '0000':
             sys.exit()
@@ -61,9 +65,9 @@ def display_value(list_single_value, list_mul_value):
         return 1
     else:
         print('\nYou are wrong\n')
-        print('Question: ' + list_single_value[0] + '\n')
-        print('Correct Answer: ' + list_mul_value[0])
-        print('Your Answer: ' + list_mul_value[x[int(check)-1]])
+        print('Question: ' + colorama.Back.BLACK + list_single_value[0] + '\n' + colorama.Style.RESET_ALL)
+        print('Correct Answer: ' + colorama.Back.BLACK + list_mul_value[0] + colorama.Style.RESET_ALL)
+        print('Your Answer: ' + colorama.Back.BLACK + colorama.Fore.RED + list_mul_value[x[int(check)-1]] + colorama.Style.RESET_ALL)
         a = input('Press any key to continue.')
         if a == '0000':
             sys.exit()

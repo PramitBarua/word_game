@@ -18,6 +18,7 @@ from src.word_game_package.update_result import update_result
 import os
 import pickle
 import sys
+import colorama
 
 def write_game(num_dict, **kargs):
     if 'index' in kargs:
@@ -25,13 +26,13 @@ def write_game(num_dict, **kargs):
     else:
         index = random_number(num_dict)
         
-    print('\n' + num_dict['meaning'][index])
+    print('\n' + colorama.Back.BLACK + num_dict['meaning'][index] + colorama.Style.RESET_ALL)
     check = input('Write the word:')
-    if check == num_dict['word'][index]:
+    if check.lower() == num_dict['word'][index].lower():
         print('\nGood job\n')
-        print('Question: ' + num_dict['meaning'][index])
-        print('Correct Answer: ' + num_dict['word'][index])
-        print('Your Answer: ' + check)
+        print('Question: ' + colorama.Back.BLACK + num_dict['meaning'][index] + colorama.Style.RESET_ALL)
+        print('Correct Answer: ' + colorama.Back.BLACK + num_dict['word'][index] + colorama.Style.RESET_ALL)
+        print('Your Answer: ' + colorama.Back.BLACK + check + colorama.Style.RESET_ALL)
         a = input('Press any key to continue.')
         if a == '0000':
             sys.exit()
@@ -40,9 +41,9 @@ def write_game(num_dict, **kargs):
         return num_dict
     else:
         print('\nYou are wrong\n')
-        print('Question: ' + num_dict['meaning'][index])
-        print('Correct Answer: ' + num_dict['word'][index])
-        print('Your Answer: ' + check)
+        print('Question: ' + colorama.Back.BLACK + num_dict['meaning'][index] + colorama.Style.RESET_ALL)
+        print('Correct Answer: ' + colorama.Back.BLACK + num_dict['word'][index] + colorama.Style.RESET_ALL)
+        print('Your Answer: ' + colorama.Back.BLACK + colorama.Fore.RED + check + colorama.Style.RESET_ALL)
         a = input('Press any key to continue.')
         if a == '0000':
             sys.exit()

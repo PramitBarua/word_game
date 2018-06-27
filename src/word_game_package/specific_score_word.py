@@ -17,15 +17,17 @@ import os
 import pickle
 import random
 import sys
+import colorama
 
 def specific_score_words(dict_old, num_list):
 #     num_list contains index of more than 5 words
-    print('We have more than 5 words that score below -3.\n')
+    
     while(True):
+        print('We have more than 5 words that score below -1.\n')
         while(True):
             for item in num_list:
-                print(dict_old['word'][item] + '\n')
-                print(dict_old['meaning'][item])
+                print(colorama.Back.BLACK + dict_old['word'][item] + colorama.Style.RESET_ALL + '\n')
+                print(colorama.Back.BLACK + dict_old['meaning'][item] + colorama.Style.RESET_ALL)
                 b = input('Press any key to continue.')
                 if b == '0000':
                     sys.exit()
@@ -42,7 +44,7 @@ def specific_score_words(dict_old, num_list):
                 choose_the_game(dict_old, index = index)
                 visited.append(index)
             elif len(visited) == len(num_list):
-                num_list = [index for index in range(len(dict_old['score'])) if dict_old['score'][index] < -3]
+                num_list = [index for index in range(len(dict_old['score'])) if dict_old['score'][index] < -1]
                 break #break 2nd while
         if len(num_list) > 0:
             check = input('Still there are some words would you to study now?(y/n)')
@@ -51,6 +53,7 @@ def specific_score_words(dict_old, num_list):
             if check == 'n':
                 break
         else:
+            print('No word left.\n')
             break    
 
 

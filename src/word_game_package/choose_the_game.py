@@ -14,6 +14,7 @@ __email__ = ["pramit.barua@student.kit.edu", "pramit.barua@gmail.com"]
 
 from src.word_game_package.mul_choice_que import mul_choice_que
 from src.word_game_package.write_game import write_game
+from src.word_game_package.tell_the_meaning import tell_the_meaning
 from src.word_game_package.save_file import saving_file
 
 import os
@@ -21,16 +22,20 @@ import pickle
 import random
 
 def choose_the_game(dict_old, **kargs):
-    seed = random.randint(-1,1) #decide which game will perform
+    seed = random.randint(-5,15) #decide which game will perform
     if 'index' in kargs:
-        if seed < 0: # means multiple choice ans 
+        if seed < 0: # means tell the meaning we are trying to recall the studied words 
+            tell_the_meaning(dict_old, index = kargs['index'])
+        elif seed > 0 and seed < 5: 
             dict_new = mul_choice_que(dict_old, index = kargs['index'])
             saving_file(dict_new)
         else: #writing the word, meaning will be given
             dict_new = write_game(dict_old, index = kargs['index'])
             saving_file(dict_new)
     else:
-        if seed < 0: # means multiple choice ans 
+        if seed < 0: # means tell the meaning we are trying to recall the studied words 
+            tell_the_meaning(dict_old)
+        elif seed > 0 and seed < 5: #multiple choice ans
             dict_new = mul_choice_que(dict_old)
             saving_file(dict_new)
         else: #writing the word, meaning will be given

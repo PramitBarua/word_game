@@ -31,7 +31,7 @@ def random_number(num_dict):
     index = num_list[random.randint(0,len(num_list)-1)]           
     
     while(1):
-        if num_dict['score'][index]<-1:
+        if num_dict['score'][index]<=-4:
             break
         elif len(num_list)>15:
             break

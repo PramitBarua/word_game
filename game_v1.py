@@ -20,10 +20,13 @@ from src.word_game_package.write_game import write_game
 from src.word_game_package.save_file import saving_file
 from src.word_game_package.choose_the_game import choose_the_game
 from src.word_game_package.specific_score_word import specific_score_words
+from src.word_game_package.tell_the_meaning import tell_the_meaning
 
 import pickle
 import random
 import argparse
+import colorama
+
 
 # def saving_file(num_dict):
 #     with open('word_list.pickle', 'wb') as handle:
@@ -61,13 +64,21 @@ if __name__ == '__main__':
         if len(num_list) == 0:
             print('No word on this score.')
         for idx in num_list:
-            print(dict_old['word'][idx] + '\t' +dict_old['meaning'][idx] + '\t' + 
-                  str(dict_old['score'][idx])+ '\n\n')
+            print(colorama.Back.BLACK + dict_old['word'][idx] + '\t' + 
+                  dict_old['meaning'][idx] + '\t' +
+                  colorama.Style.RESET_ALL + str(dict_old['score'][idx])+ '\n\n')
+    elif args.Modify_word_list == 'rev':
+        tell_the_meaning(dict_old, all=True)
     else:  
-        num_list = [index for index in range(len(dict_old['score'])) if dict_old['score'][index] < -3]     
-        if len(num_list) > 5:
-            specific_score_words(dict_old, num_list)       
-        else:          
-            for x in range(15):
-                choose_the_game(dict_old)
-            
+        while(True):
+            num_list = [index for index in range(len(dict_old['score'])) if dict_old['score'][index] < -1]     
+            if len(num_list) > 5:
+                specific_score_words(dict_old, num_list) 
+                break      
+            else:    
+                for x in range(15):
+                    choose_the_game(dict_old)
+            check = input('Would you like to play again?')
+            if check == 'n':
+                break
+                    

@@ -53,6 +53,7 @@ def add_word(dict_old):
             dict_old['word'].append(new_word)
             dict_old['meaning'].append(new_meaning)
             dict_old['score'].append(0)
+            dict_old['visited'].append(0)
             
 #             with open('word_list.pickle', 'wb') as handle:
 #                 pickle.dump(dict_old, handle, protocol=pickle.HIGHEST_PROTOCOL)
