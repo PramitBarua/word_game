@@ -1,13 +1,13 @@
 # word_game
 word game for fun
 
-This is a word game software. In this present state of the code, there are 304 words in the list. 
+This is a word game software. In this present state of the code, there are around 1600 words in the list. 
 Most of these words are for GRE test takers.
 
 This software allows the player to add a new word, edit or delete existing words.
 
-Every word in the list has a unique score ranging from -5 to 5. -5 means so hard to remember and
-5 means easy to remember. However, this scoring was done based on my personal feeling. :P
+Every word in the list has a unique score ranging from -5 to 5. -5 means so hard to remember,
+5 means easy to remember and in between (0) is nutral. Initally, all of the words have score 0.
 
 It allows the player to play various games such as write the word from the meaning, multiple 
 choice question and guessing words. The program will set the game randomly. However, the code 
