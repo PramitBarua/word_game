@@ -7,20 +7,29 @@ from . import views as v
 
 
 class FormWindowController(tk.Toplevel):
-    def __init__(self, app_callbacks, index=None):
+    def __init__(self, app_callbacks, word_list, mode=None, index=None):
         super().__init__()
         # hide window until the application is set up
         self.withdraw()
         
+        if mode in ('Edit', 'Delete') and index is None:
+            mb.showerror('Error', f'{mode} word is not possible from selection window')
+            self.on_delete_window()
+            return
+        
+        # place the edit window on top 
         self.grab_set()
-        self.title('Add/Edit window')
+        
+        # set title
+        self.title_str = mode + ' Window'
+        self.title(self.title_str)
         
         #initiate model
         self.word_game_model = m.WordGameModel()
         
         # instantiate variables
         self.app_callbacks = app_callbacks
-        self.word_list = self.word_game_model.get_word_list()
+        self.word_list = word_list
         self.index = index
         
         #initiate GUI
@@ -29,10 +38,10 @@ class FormWindowController(tk.Toplevel):
 #         setup callback methods
         self._setup_callbacks()
 
-        # populate form when index is given
+        # populate the form when the index is given
         if self.index is not None:
             self.populate_form()
-        else:
+        if mode == 'New':
             self.index = len(self.word_list)  
 
         # set window geometry
@@ -61,8 +70,7 @@ class FormWindowController(tk.Toplevel):
     def _setup_callbacks(self):
         """Configures widgets of the application 
         view instances to enable their functionality."""
-        
-        # select game callbacks
+        # bind callbacks 
         self.edit_form.ok_btn.config(command = self.on_ok_btn)
         self.edit_form.cancel_btn.config(command = self.on_delete_window) 
         
@@ -85,23 +93,59 @@ class FormWindowController(tk.Toplevel):
         self.minsize(width, height)   
         
     def populate_form(self):
+        '''populates widgets with values'''
+        # get values of target word
         target_item = self.word_list[self.index]
+        # place them in the widgets
         self.edit_form.populate_widget(target_item)
 
     ##############################
     ###    CALLBACK METHODS    ###
     ##############################
     def on_ok_btn(self):
-#         print('Ok btn is pressed')
         input_value = self.edit_form.get_input_values()
-#         print(input_value)
-        if all([input_value['Word'], input_value['Meaning'],  input_value['Parts of speech']]):
-            self.word_game_model.save_word_list(index=self.index, data=input_value)
-            # destroy window
-            self.grab_release()
-            self.destroy()
-        else:
-            mb.showerror('Error', 'Any of the three field (Word, Meaning, Part of speech) is empty.')
+        if self.title_str == 'New Window':
+            if input_value['Word'].lower() in [item['Word'].lower() for item in self.word_list]:
+                mb.showerror('Word exist', f'"{input_value["Word"]}" exists in the list.', parent=self)
+                return
+            if all([input_value['Word'], input_value['Meaning'],  input_value['Parts of speech']]): pass
+            else:
+                field = 'Word' if input_value['Word'] == '' else 'Meaning' if input_value['Meaning'] == '' else 'Parts of speech'
+                mb.showerror('Error', f'{field} field is empty.')
+                return
+        elif self.title_str == 'Edit Window':                
+            # check if word, meaning, and parts of speech widgets are filled
+            if all([input_value['Word'], input_value['Meaning'], input_value['Parts of speech']]): pass
+            else:
+                field = 'Word' if input_value['Word'] == '' else 'Meaning' if input_value['Meaning'] == '' else 'Parts of speech'
+                mb.showerror('Error', f'{field} field is empty.')
+                return
+            input_value['Group'] = self.word_list[self.index]['Group']
+
+        else:  # user pressed delete button 
+            if self.index is None:
+                mb.showerror(f'Deleting is not possible from selection window')
+                return
+            input_value['Group'] = self.word_list[self.index]['Group']
+            # get the index which will be deleted
+            index = [idx for idx, item in enumerate(self.word_list)
+                     if item['Word'].lower() == input_value['Word'].lower()]
+            if index:
+                # make a final check up
+                result = mb.askokcancel('Delete', f'Do you really want to delete {input_value["Word"]}?')
+                if result:
+                    self.index = index[0]
+                    input_value = None
+                else: return  # user changes mind 
+            
+            else:  # word does not exist in the list
+                message = f'{input_value["Word"]} does not exist in the list' if input_value['Word'] !='' else 'Word field is empty'
+                mb.showerror('Invalid Input', message)
+                return
+        # execute word removal action
+        self.word_game_model.save_word_list(window = self.title_str, index=self.index, data=input_value, word_list=self.word_list)
+        # destroy window
+        self.on_delete_window()
     
     ##############################
     ###    PROTOCOL METHODS    ###
@@ -109,14 +153,8 @@ class FormWindowController(tk.Toplevel):
     def on_delete_window(self):
         """Executes the 'quit_application' callback method 
         of the application instance."""
-        # make the bottom top level workable
+        # make the bottom top-level workable
         self.grab_release()
         
         # destroy controller instance
         self.destroy()
-        
-#         # quit application via callback or by self.quit()
-#         if 'quit_application' in self.app_callbacks:
-#             self.app_callbacks['quit_application']()  
-#         else:
-#             self.quit()  

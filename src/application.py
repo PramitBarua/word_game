@@ -9,23 +9,27 @@ class Application(tk.Tk):
         super().__init__()
         # hide root window
         self.withdraw()
-        self.game_count = 0
+
+        # instantiate a dictionary of application-specific callback references 
         self.app_callbacks = {
-            'mode_selection': self.run_mode_selection,
+            'game_window': self.run_game_window,
             'edit_window': self.run_edit_window,
             'quit_application': self.quit_application 
             }
-        self.run_mode_selection()
+
+        # instantiate game window controller
+        self.run_game_window()
         
     ##############################
     ###    CALLBACK METHODS    ###
     ##############################
-    def run_mode_selection(self):
+    def run_game_window(self):
         """Instantiates game selection application."""
         self.game_window = GameWindowController(self.app_callbacks)
 
-    def run_edit_window(self, index=None):
-        self.form_window = FormWindowController(self.app_callbacks, index=index)
+    def run_edit_window(self, word_list, mode=None, index=None):
+        '''instantiates edit form'''
+        self.form_window = FormWindowController(self.app_callbacks, word_list=word_list, mode=mode, index=index)
     
     def quit_application(self):
         """Quits the application by 
